@@ -2,6 +2,9 @@
 
 練習用環境  
 
+・コンテナ稼働状況確認
+docker ps -a
+
 ・コンテナ内に入るとき  
 docker exec -it containerID /bin/bash  
 dockerのCLIでコマンド操作、ファイル実行  
