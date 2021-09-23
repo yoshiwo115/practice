@@ -7,23 +7,26 @@ declinable_word = "綺麗"
 
 import xml.etree.ElementTree as ET
 
-# xmlデータを一気に読み込む場合
-# 重すぎてできなかった
-# tree = ET.parse('kyoto-univ-web-cf-2.0.xml')
-# 一番上の階層の要素取り出し
-# root = tree.getroot()
-# print(root.tag)
-# print(root.attrib)
-
-
 # メモリ開放しながら読む
 
 context = ET.iterparse('kyoto-univ-web-cf-2.0.xml', events=('start', 'end'))
 
-_, entry = next(context)  # 一つ進めて root を得る
+#next関数_イテレータを回して、読んだ要素は消す
+# >>>iter_a = [1,2,3,4,5]
+# >>>print(next(iter_a))
+# 1
+# >>>print(next(iter_a))
+# 2
+_, entry = next(context)  # 一つ進めてentryを得る
+print(entry)
+
+#<entry headword="あいにくだ/あいにくだ" predtype="形">
+# headword="あいにくだ/あいにくだ" ここをxmlで扱うには
 
 for event, elem in context:
-    if event == 'end' and elem.tag == 'component':
+    print(event)
+    if event == 'end' and elem.tag == 'component': # </component>が来たら
         # do something on component
         print(elem.text)
-        entry.clear()  # 用が済んだらrootを空に
+        break
+        entry.clear()  # entryを空にしてメモリ開放
