@@ -26,14 +26,11 @@ print(entry)
 # headword="あいにくだ/あいにくだ" ここをxmlで扱うには
 
 for event, elem in context:
-    print(event)
-    if event == 'start' and elem.tag == 'entry':
+    if event == 'start' and elem.tag == 'entry' and 'あいにく' in elem.attrib['headword']:
         print(elem.attrib)
 
     if event == 'end' and elem.tag == 'component': # </component>が来たら
         # do something on component
         print(elem.text)
-        
-    
         break
         entry.clear()  # entryを空にしてメモリ開放
