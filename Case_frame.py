@@ -14,10 +14,13 @@ import xml.etree.ElementTree as ET
 context = ET.iterparse('kyoto-univ-web-cf-2.0.xml', events=('start', 'end'))
 
 for event,elem in context:
-    if event == 'start' and elem.tag == 'entry':
-        if 'あしらう' in elem.attrib['headword']:
+    if event == 'start' and elem.tag == 'entry' and 'あえない' in elem.attrib['headword']:
             print(elem.attrib)
-            break
-        else:
-            elem.clear()
-            print('clear')
+
+            for event, elem in context:
+                if event == 'end' and elem.tag == 'entry':
+                    break
+                elif event == 'end' and elem.tag == 'component':
+                    print(elem.text)
+    else:
+        elem.clear()
