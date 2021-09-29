@@ -1,3 +1,5 @@
+# 格フレームを読むファイル
+
 import random
 import re
 
@@ -25,8 +27,13 @@ print(entry)
 
 for event, elem in context:
     print(event)
+    if event == 'start' and elem.tag == 'entry':
+        print(elem.attrib)
+
     if event == 'end' and elem.tag == 'component': # </component>が来たら
         # do something on component
         print(elem.text)
+        
+    
         break
         entry.clear()  # entryを空にしてメモリ開放
