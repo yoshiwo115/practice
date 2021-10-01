@@ -4,8 +4,8 @@ import random
 import re
 
 # 検索ワード
-noun_word = "景色"
-declinable_word = "綺麗"
+input_noun_word = "景色"
+input_declinable_word = "綺麗"
 
 import xml.etree.ElementTree as ET
 
@@ -13,8 +13,8 @@ def search_noun():
     context = ET.iterparse('kyoto-univ-web-cf-2.0.xml', events=('start', 'end'))
     # メモリ開放しながらxmlを読む
     for event,elem in context:
-        if event == 'start' and elem.tag == 'entry' and declinable_word in elem.attrib['headword']: 
-            # headwordが特定の用言だったとき
+        if event == 'start' and elem.tag == 'entry' and input_declinable_word in elem.attrib['headword']: 
+            # headwordに特定の用言が含まれていたとき
                 
                 print(elem.attrib) #何で検索されているか表示
                 
