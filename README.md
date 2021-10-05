@@ -3,6 +3,7 @@
 練習用環境  
 
 Dockerfile更新してイメージを更新するとき  
+docker build -t yoshiwo115/practiceenv:latest .
 docker-compose up --build  
 
 ・コンテナ稼働状況確認
