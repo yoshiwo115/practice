@@ -11,7 +11,7 @@ dockerのCLIでコマンド操作、ファイル実行
   
 ・powershellでのheadとtail  
 Get-Content "kyoto-univ-web-cf-2.0.xml"-Encoding UTF8 | Select-Object -first 100  
-Get-Content "kyoto-univ-web-cf-2.0.xml"-Encoding UTF8 | Select-Object -last 100
+Get-Content "kyoto-univ-web-cf-2.0.xml"-Encoding UTF8 | Select-Object -last 100  
 
-
-モバイルPCでの試し
+・grep的なpowershellコマンド
+Select-String "美味しい/おいしい" kyoto-univ-web-cf-2.0.xml -Encoding UTF8  
