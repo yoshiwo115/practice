@@ -8,8 +8,15 @@ def sentence_analysys(sentence):
     # pyKNPで格情報取得
     return 0
 
-import re
-import pyknp 
+from pyknp import KNP
 
-knp = pyknp.KNP(jumanpp=True)
-result = knp.parse("この景色綺麗だね。")
+knp = KNP()
+
+result = knp.parse(user_input())
+
+for tag in result.tag_list():
+    if tag.pas is not None: # find predicate
+        print('述語: %s' % ''.join(mrph.midasi for mrph in tag.mrph_list()))
+        for case, args in tag.pas.arguments.items(): # case: str, args: list of Argument class
+            for arg in args: # arg: Argument class
+                print('\t格: %s,  項: %s  (項の基本句ID: %d)' % (case, arg.midasi, arg.tid))
