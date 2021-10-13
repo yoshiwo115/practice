@@ -26,13 +26,15 @@ def sentence_analysys(sentence):
 # 直喩名詞選択機構
 def select_simile_noun_word(noun_word, declinable_word, case):
     import random
-    simile_noun_word = random.choice(search_caseframe(declinable_word))
+    simile_noun_word = random.choice(search_caseframe(declinable_word, case))
+    if simile_noun_word == "×":
+        print('村上春樹くらい分からない')
     print('slimile_' + simile_noun_word)
 
     return simile_noun_word
 
 # 格フレーム検索
-def search_caseframe(declinable_word):
+def search_caseframe(declinable_word, case):
     import xml.etree.ElementTree as ET
 
     component_array = []
@@ -52,17 +54,25 @@ def search_caseframe(declinable_word):
                         elem.clear()
                         return component_array #ループを抜ける
 
-                    elif event == 'end' and elem.tag == 'component': 
-                        #componentのendタグか来たら
-                        
-                        # print(elem.text) #内容を表示
-                        print(elem.text)
-                        component_array.append(elem.text)
+                    if event == 'start' and elem.tag == 'argument' and case in elem.attrib['case']:
+                        for event, elem in context:
+                            if event == 'end' and elem.tag == 'argument':
+                                elem.clear()
+                                break
+                            elif event == 'end' and elem.tag == 'component':
+                                component_array.append(elem.text)
+                                print(elem.text)
+                    
+                    else:
+                        elem.clear()
+
+
+
         else:
             elem.clear()
             # メモリを開放する
     
-    return "なんもなし"
+    return "×"
 
 # 固有名詞選択機構
 def select_propernoun():
@@ -91,7 +101,7 @@ noun_word = result[0]
 # 用言
 declinable_word = result[1]
 # 格
-case = result[2]
+case = result[2] + '格'
 
 # 直喩に使う名詞
 simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
