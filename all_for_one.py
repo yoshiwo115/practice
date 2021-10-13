@@ -85,6 +85,17 @@ def select_propernoun():
 
 # twitter検索
 def search_twitter():
+    import tweepy
+    import random
+    import re
+
+    f = open('twitter_token.txt', 'r')
+    datalist = [s.strip() for s in f.readlines()]
+    api_key = datalist[0]
+    api_secret_key = datalist[1]
+    access_token = datalist[2]
+    access_token_secret = datalist[3]
+    
     return 0
 
 # 出力
