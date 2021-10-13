@@ -55,22 +55,27 @@ def search_caseframe(declinable_word, case):
                         return component_array #ループを抜ける
 
                     if event == 'start' and elem.tag == 'argument' and case in elem.attrib['case']:
+
                         for event, elem in context:
+                            #argument以下でループを回す
+                            
                             if event == 'end' and elem.tag == 'argument':
                                 elem.clear()
-                                break
+                                break # ループを抜けて次のargumentを読む
+
                             elif event == 'end' and elem.tag == 'component':
                                 component_array.append(elem.text)
                                 print(elem.text)
                     
                     else:
                         elem.clear()
+                        # argumentタグ以下のメモリを開放する⇒次のargumentを読む
 
 
 
         else:
             elem.clear()
-            # メモリを開放する
+            # entryタグ以下のメモリを開放する⇒次のentryを読む
     
     return "×"
 
