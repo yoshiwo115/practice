@@ -82,10 +82,6 @@ def search_caseframe(declinable_word, case):
     
     return "×"
 
-# 固有名詞選択機構
-def select_propernoun():
-    return 0
-
 # twitter検索
 def search_twitter(declinable_word, simile_noun_word):
     import tweepy
@@ -111,7 +107,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 5
+    count = 25
 
     # カウント変数
     n = 0
@@ -129,6 +125,12 @@ def search_twitter(declinable_word, simile_noun_word):
 
     return search_results
 
+# 固有名詞選択機構
+def select_propernoun(search_twitter_results):
+    # 用言と項構造になっている固有名詞を抽出
+    
+    return 0
+
 # 出力
 def system_output():
     return 0
@@ -138,20 +140,23 @@ def main():
     input_dialogue = user_input()
 
     # 文情報解析結果
-    result = sentence_analysys(input_dialogue)
+    sentence_analysys_result = sentence_analysys(input_dialogue)
 
     # 名詞
-    noun_word = result[0]
+    noun_word = sentence_analysys_result[0]
     # 用言
-    declinable_word = result[1]
+    declinable_word = sentence_analysys_result[1]
     # 格
-    case = result[2] + '格'
+    case = sentence_analysys_result[2] + '格'
 
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
 
     # twitter検索
-    search_results = search_twitter(declinable_word, simile_noun_word)
+    search_twitter_results = search_twitter(declinable_word, simile_noun_word)
+
+    # 固有名詞選択
+    result = select_propernoun(search_twitter_results)
 
 
 
