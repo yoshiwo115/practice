@@ -99,7 +99,7 @@ def search_twitter(declinable_word, simile_noun_word):
     auth.set_access_token(access_token, access_token_secret)
 
     # インスタンス生成
-    api = tweepy.API(auth)
+    api = tweepy.API(auth, wait_on_rate_limit=True)
 
     # botのツイートを除外するため，一般的なクライアント名を列挙
     sources = ["TweetDeck", "Twitter Web Client", "Twitter for iPhone",

@@ -8,11 +8,13 @@ from spacy import displacy
 nlp = spacy.load('ja_ginza')
 # #ここまで
 
+f = open('twitter_token.txt', 'r')
+datalist = [s.strip() for s in f.readlines()]
 # ここに先程取得したAPIキーとトークンを入力
-api_key = "3frLxH2Vi06K8PG1kKhsLWNIF"
-api_secret_key = "9e7BKlF9uOiK9BCfsVlDQCMvh9EpRtljLuZcPmN4H8XOy7QJJm"
-access_token = "3229453230-whp3Lkfx6HXUMyB20ai0Sm831dPCYcFNtcHzrHc"
-access_token_secret = "LYwBJL8y65eo3rZCwumQr1oi0FHy6EG0pe5IpkGGvFTok"
+api_key = datalist[0]
+api_secret_key = datalist[1]
+access_token = datalist[2]
+access_token_secret = datalist[3]
 
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(access_token, access_token_secret)
