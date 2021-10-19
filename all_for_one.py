@@ -102,7 +102,7 @@ def search_twitter(declinable_word, simile_noun_word):
     auth = tweepy.OAuthHandler(api_key, api_secret_key)
     auth.set_access_token(access_token, access_token_secret)
 
-    #インスタンス生成
+    # インスタンス生成
     api = tweepy.API(auth)
 
     # botのツイートを除外するため，一般的なクライアント名を列挙
@@ -110,13 +110,15 @@ def search_twitter(declinable_word, simile_noun_word):
                 "Twitter for iPad", "Twitter for Android", "Twitter for Android Tablets",
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
-    #取得ツイート数
+    # 取得ツイート数
     count = 5
-    data = []
+
+    # カウント変数
     n = 0
 
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets'
+    print(search_word)
 
     search_results = api.search_tweets(q = search_word, count = count)
 
@@ -124,7 +126,6 @@ def search_twitter(declinable_word, simile_noun_word):
         n += 1
         print('----{}----'.format(n))
         print(result.text)
-
 
     return 0
 
