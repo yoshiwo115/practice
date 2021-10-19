@@ -127,7 +127,7 @@ def search_twitter(declinable_word, simile_noun_word):
         print('----{}----'.format(n))
         print(result.text)
 
-    return 0
+    return search_results
 
 # 出力
 def system_output():
@@ -153,4 +153,5 @@ case = result[2] + '格'
 # 直喩に使う名詞
 simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
 
-search_twitter(declinable_word, simile_noun_word)
+# twitter検索
+search_results = search_twitter(declinable_word, simile_noun_word)
