@@ -111,21 +111,19 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     #取得ツイート数
-    count = 10
+    count = 5
     data = []
     n = 0
 
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets'
-    print(search_word)
 
-    for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
+    search_results = api.search_tweets(q = search_word, count = count)
+
+    for result in search_results:
         n += 1
         print('----{}----'.format(n))
-        print(result.text) 
-        data.append(result)
-    
-    print("ループ抜け")
+        print(result.text)
 
 
     return 0
