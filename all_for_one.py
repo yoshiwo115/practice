@@ -133,25 +133,29 @@ def search_twitter(declinable_word, simile_noun_word):
 def system_output():
     return 0
 
+def main():
+    # user入力文
+    input_dialogue = user_input()
+
+    # 文情報解析結果
+    result = sentence_analysys(input_dialogue)
+
+    # 名詞
+    noun_word = result[0]
+    # 用言
+    declinable_word = result[1]
+    # 格
+    case = result[2] + '格'
+
+    # 直喩に使う名詞
+    simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
+
+    # twitter検索
+    search_results = search_twitter(declinable_word, simile_noun_word)
+
 
 
 from pyknp import KNP
 
-# user入力文
-input_dialogue = user_input()
-
-# 文情報解析結果
-result = sentence_analysys(input_dialogue)
-
-# 名詞
-noun_word = result[0]
-# 用言
-declinable_word = result[1]
-# 格
-case = result[2] + '格'
-
-# 直喩に使う名詞
-simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
-
-# twitter検索
-search_results = search_twitter(declinable_word, simile_noun_word)
+if __name__ == "__main__":
+    main()
