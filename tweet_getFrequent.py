@@ -18,7 +18,7 @@ auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(access_token, access_token_secret)
 
 #インスタンス生成
-api = tweepy.API(auth_handler=auth, wait_on_rate_limit=True)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # botのツイートを除外するため，一般的なクライアント名を列挙
 sources = ["TweetDeck", "Twitter Web Client", "Twitter for iPhone",
@@ -36,12 +36,13 @@ data=[]
 #Ginza用のリスト
 Ginzadata=[]
 
-for result in tweepy.Cursor(api.search, q=search_word).items(count):
+for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
     n += 1
     print('----{}----'.format(n))
     print(result.text)
     data.append(result)
     Ginzadata.append(result.text)
+
 
 # 最新ツイートの日時
 data[0].created_at

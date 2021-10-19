@@ -95,6 +95,23 @@ def search_twitter():
     api_secret_key = datalist[1]
     access_token = datalist[2]
     access_token_secret = datalist[3]
+
+    auth = tweepy.OAuthHandler(api_key, api_secret_key)
+    auth.set_access_token(access_token, access_token_secret)
+
+    #インスタンス生成
+    api = tweepy.API(auth)
+
+    # botのツイートを除外するため，一般的なクライアント名を列挙
+    sources = ["TweetDeck", "Twitter Web Client", "Twitter for iPhone",
+                "Twitter for iPad", "Twitter for Android", "Twitter for Android Tablets",
+                "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
+
+    #取得ツイート数
+    count = 5
+
+    #検索ワード
+    search_word = '綺麗だ 顔 -filter:retweets'
     
     return 0
 
