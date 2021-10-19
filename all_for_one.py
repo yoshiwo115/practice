@@ -27,9 +27,12 @@ def sentence_analysys(sentence):
 def select_simile_noun_word(noun_word, declinable_word, case):
     import random
     simile_noun_word = random.choice(search_caseframe(declinable_word, case))
+
     if simile_noun_word == "×":
         print('村上春樹くらい分からない')
-    print('slimile_' + simile_noun_word)
+
+    # /以降の文字削除
+    simile_noun_word = simile_noun_word.split('/')[0]
 
     return simile_noun_word
 
@@ -84,7 +87,7 @@ def select_propernoun():
     return 0
 
 # twitter検索
-def search_twitter():
+def search_twitter(declinable_word, simile_noun_word):
     import tweepy
     import random
     import re
@@ -108,11 +111,23 @@ def search_twitter():
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     #取得ツイート数
-    count = 5
+    count = 10
+    data = []
+    n = 0
 
     #検索ワード
-    search_word = '綺麗だ 顔 -filter:retweets'
+    search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets'
+    print(search_word)
+
+    for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
+        n += 1
+        print('----{}----'.format(n))
+        print(result.text) 
+        data.append(result)
     
+    print("ループ抜け")
+
+
     return 0
 
 # 出力
@@ -138,3 +153,5 @@ case = result[2] + '格'
 
 # 直喩に使う名詞
 simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
+
+search_twitter(declinable_word, simile_noun_word)
