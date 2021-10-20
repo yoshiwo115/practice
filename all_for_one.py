@@ -1,4 +1,5 @@
 from pyknp import KNP
+from pyknp import Juman
 import random
 
 
@@ -126,18 +127,28 @@ def search_twitter(declinable_word, simile_noun_word):
         # print('----{}----'.format(n))
         # print(result.text)
         results_text_list.append(result.text)
-        # print(results_text_list)
 
-    # 一つの文字列に
-    results_string = "  \n".join(results_text_list)
-
-    return results_string
+    return results_text_list
 
 # 固有名詞選択機構
 def select_propernoun(search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
-    # all_propernoun_word_in_twitter = 
+    jumanpp = Juman()
+    
+    all_propernoun_word_in_twitter = []
+
+    for sentence in search_twitter_results:
+
+        result = jumanpp.analysis(sentence)
+
+        for mrph in result.mrph_list(): # 各形態素にアクセス
+            if mrph.bunrui == '固有名詞' or mrph.bunrui == '地名' or mrph.bunrui == '組織名':
+                print(mrph.midasi)
+                all_propernoun_word_in_twitter.append(mrph.midasi)
+
+    if all_propernoun_word_in_twitter == []:
+        all_propernoun_word_in_twitter = ['佐藤健']
 
     propernoun_word = random.choice(all_propernoun_word_in_twitter)
 
@@ -166,12 +177,11 @@ def main():
     search_twitter_results = search_twitter(declinable_word, simile_noun_word)
 
     # 固有名詞選択
-    # propernoun_word = select_propernoun(search_twitter_results)
+    propernoun_word = select_propernoun(search_twitter_results)
 
     # 合体
-    # result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
-    result = 'そうだね。' '佐藤健の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
-
+    result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
+    
     # 出力
     print(result)
 
