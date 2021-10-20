@@ -1,6 +1,6 @@
-# User入力機構
-def user_input():
-    return input()
+from pyknp import KNP
+import random
+
 
 # 文情報解析機構
 def sentence_analysys(sentence):
@@ -25,7 +25,7 @@ def sentence_analysys(sentence):
 
 # 直喩名詞選択機構
 def select_simile_noun_word(noun_word, declinable_word, case):
-    import random
+    
     simile_noun_word = random.choice(search_caseframe(declinable_word, case))
 
     if simile_noun_word == "×":
@@ -107,7 +107,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 25
+    count = 5
 
     # カウント変数
     n = 0
@@ -131,13 +131,11 @@ def select_propernoun(search_twitter_results):
     
     return 0
 
-# 出力
-def system_output():
-    return 0
 
 def main():
-    # user入力文
-    input_dialogue = user_input()
+
+    # User入力
+    input_dialogue = input()
 
     # 文情報解析結果
     sentence_analysys_result = sentence_analysys(input_dialogue)
@@ -156,11 +154,15 @@ def main():
     search_twitter_results = search_twitter(declinable_word, simile_noun_word)
 
     # 固有名詞選択
-    result = select_propernoun(search_twitter_results)
+    propernoun_word = select_propernoun(search_twitter_results)
+
+    # 合体
+    result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
+　
+    # 出力
+    print(result)
 
 
-
-from pyknp import KNP
 
 if __name__ == "__main__":
     main()
