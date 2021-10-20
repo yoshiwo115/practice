@@ -112,6 +112,9 @@ def search_twitter(declinable_word, simile_noun_word):
     # カウント変数
     n = 0
 
+    # 空のリスト
+    results_text_list = []
+
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets'
     print(search_word)
@@ -119,17 +122,26 @@ def search_twitter(declinable_word, simile_noun_word):
     search_results = api.search_tweets(q = search_word, count = count)
 
     for result in search_results:
-        n += 1
-        print('----{}----'.format(n))
-        print(result.text)
+        # n += 1
+        # print('----{}----'.format(n))
+        # print(result.text)
+        results_text_list.append(result.text)
+        # print(results_text_list)
 
-    return search_results
+    # 一つの文字列に
+    results_string = "  \n".join(results_text_list)
+
+    return results_string
 
 # 固有名詞選択機構
 def select_propernoun(search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
-    return 0
+    # all_propernoun_word_in_twitter = 
+
+    propernoun_word = random.choice(all_propernoun_word_in_twitter)
+
+    return propernoun_word
 
 
 def main():
@@ -154,15 +166,14 @@ def main():
     search_twitter_results = search_twitter(declinable_word, simile_noun_word)
 
     # 固有名詞選択
-    propernoun_word = select_propernoun(search_twitter_results)
+    # propernoun_word = select_propernoun(search_twitter_results)
 
     # 合体
-    result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
-　
+    # result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
+    result = 'そうだね。' '佐藤健の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
+
     # 出力
     print(result)
-
-
 
 if __name__ == "__main__":
     main()
