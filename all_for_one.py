@@ -117,15 +117,12 @@ def search_twitter(declinable_word, simile_noun_word):
     results_text_list = []
 
     #検索ワード
-    search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets'
+    search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies'
     print(search_word)
 
     search_results = api.search_tweets(q = search_word, count = count)
 
     for result in search_results:
-        # n += 1
-        # print('----{}----'.format(n))
-        # print(result.text)
         results_text_list.append(result.text)
 
     return results_text_list
@@ -139,8 +136,12 @@ def select_propernoun(search_twitter_results):
     all_propernoun_word_in_twitter = []
 
     for sentence in search_twitter_results:
-
-        result = jumanpp.analysis(sentence)
+        
+        sentence = sentence.replace(" ", "")
+        
+        print(sentence)
+        
+        result = jumanpp.analysis(str(sentence))
 
         for mrph in result.mrph_list(): # 各形態素にアクセス
             if mrph.bunrui == '固有名詞' or mrph.bunrui == '地名' or mrph.bunrui == '組織名':
