@@ -20,9 +20,8 @@ for bnst in result.bnst_list(): # 各文節へのアクセス
 print("基本句")
 for tag in result.tag_list(): # 各基本句へのアクセス
     if tag.pas is not None:
-        print('\n述語' + tag.repname)
-        data[] = get_arguments(case
-        print(data)
+        print('\n述語:' + tag.repname)
+        print(tag.pas.get_arguments('ガ'))
 #     print("\tID:%d, 見出し:%s, 係り受けタイプ:%s, 親基本句ID:%d, 素性:%s" \
 #             % (tag.tag_id, "".join(mrph.midasi for mrph in tag.mrph_list()), tag.dpndtype, tag.parent_id, tag.fstring))
 
