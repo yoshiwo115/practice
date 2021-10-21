@@ -14,11 +14,11 @@ def sentence_analysys(sentence):
 
     for tag in result.tag_list():
         if tag.pas is not None: # find predicate
-            declinable_word = ''.join(mrph.midasi for mrph in tag.mrph_list())
+            declinable_word = tag.repname
             # print('述語: '+ declinable_word)
             for case, args in tag.pas.arguments.items(): # case: str, args: list of Argument class
+                # print(get_arguments(case))
                 for arg in args: # arg: Argument class
-                    # print('\t格: %s,  項: %s  (項の基本句ID: %d)' % (case, arg.midasi, arg.tid))
                     noun_word = arg.midasi
                     case = case
 
@@ -46,7 +46,7 @@ def search_caseframe(declinable_word, case):
     context = ET.iterparse('kyoto-univ-web-cf-2.0.xml', events=('start', 'end'))
     # メモリ開放しながらxmlを読む
     for event,elem in context:
-        if event == 'start' and elem.tag == 'entry' and declinable_word in elem.attrib['headword']: 
+        if event == 'start' and elem.tag == 'entry' and declinable_word == elem.attrib['headword']: 
             # headwordに特定の用言が含まれていたとき
                 
                 for event, elem in context: 
@@ -106,7 +106,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 50
+    count = 5
 
     # カウント変数
     n = 0
@@ -126,17 +126,11 @@ def search_twitter(declinable_word, simile_noun_word):
 
     # results_text_listリストを文字列に
     search_twitter_results = "".join(results_text_list)
-    search_twitter_results = str(search_twitter_results)
     search_twitter_results = search_twitter_results.replace(" ", "")
+    search_twitter_results = str(search_twitter_results)
     
     if search_twitter_results == "":
         search_twitter_results = "森田さん空です"
-    print(search_twitter_results)
-    
-    
-
-    # if search_twitter_results[0] == '@' or '#':
-    #     search_twitter_results = search_twitter_results[1:]
 
     return search_twitter_results
 
@@ -179,8 +173,10 @@ def main():
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
 
-    # simile_noun_word = '槍'
+    simile_noun_word = '顔'
     
+    declinable_word = declinable_word.split('/')[0]
+
     # twitter検索
     search_twitter_results = search_twitter(declinable_word, simile_noun_word)
 
