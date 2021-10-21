@@ -158,7 +158,7 @@ def select_propernoun(search_twitter_results):
 def main():
 
     # User入力
-    input_dialogue = input()
+    input_dialogue = input('User入力: ')
 
     # 文情報解析結果
     sentence_analysys_result = sentence_analysys(input_dialogue)
@@ -172,9 +172,8 @@ def main():
 
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
-
-    simile_noun_word = '顔'
     
+    # twitter検索用に/以下を削除
     declinable_word = declinable_word.split('/')[0]
 
     # twitter検索
