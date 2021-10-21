@@ -106,7 +106,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 5
+    count = 50
 
     # カウント変数
     n = 0
@@ -121,7 +121,7 @@ def search_twitter(declinable_word, simile_noun_word):
     # search_results = api.search_tweets(q = search_word, count = count)
     for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
     # for result in search_results:
-        print(result.text)
+        # print(result.text)
         results_text_list.append(result.text)
 
     # results_text_listリストを文字列に
