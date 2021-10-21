@@ -2,7 +2,6 @@ from pyknp import KNP
 from pyknp import Juman
 import random
 
-
 # 文情報解析機構
 def sentence_analysys(sentence):
     # pyKNPで格情報取得
@@ -152,7 +151,6 @@ def select_propernoun(search_twitter_results):
     propernoun_word = random.choice(all_propernoun_word_in_twitter)
 
     return propernoun_word
-
 
 def main():
 
