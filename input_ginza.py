@@ -19,11 +19,16 @@ declinable_word = ""
 
 for sent in doc.sents:
     for token in sent:
-        if token.pos_=="NOUN":
-            # 名詞抜き出し
-            noun_word = token.orth_ 
-        elif token.pos_=="ADJ" or token.pos_=="VERB":
-            # 用言抜き出し
-            declinable_word = token.orth_
+        print(token.i, token.orth_, token.lemma_, token.pos_, 
+              token.tag_, token.dep_, token.head.i)
+
+# for sent in doc.sents:
+#     for token in sent:
+#         if token.pos_=="NOUN":
+#             # 名詞抜き出し
+#             noun_word = token.orth_ 
+#         elif token.pos_=="ADJ" or token.pos_=="VERB":
+#             # 用言抜き出し
+#             declinable_word = token.orth_
 
 print("search_word:", noun_word, declinable_word)

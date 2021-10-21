@@ -31,7 +31,7 @@ sources = ["TweetDeck", "Twitter Web Client", "Twitter for iPhone",
 count = 50
 
 #検索ワード
-search_word = '綺麗だ 顔 -filter:retweets'
+search_word = 'あくどい 議員 -filter:retweets'
 
 n=0
 data=[]

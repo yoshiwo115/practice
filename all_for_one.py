@@ -106,7 +106,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 50
+    count = 5
 
     # カウント変数
     n = 0
@@ -116,34 +116,45 @@ def search_twitter(declinable_word, simile_noun_word):
 
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies'
+    print(search_word)
 
     # search_results = api.search_tweets(q = search_word, count = count)
     for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
     # for result in search_results:
+        print(result.text)
         results_text_list.append(result.text)
 
-    return results_text_list
+    # results_text_listリストを文字列に
+    search_twitter_results = "".join(results_text_list)
+    search_twitter_results = str(search_twitter_results)
+    search_twitter_results = search_twitter_results.replace(" ", "")
+    
+    if search_twitter_results == "":
+        search_twitter_results = "森田さん空です"
+    print(search_twitter_results)
+    
+    
+
+    # if search_twitter_results[0] == '@' or '#':
+    #     search_twitter_results = search_twitter_results[1:]
+
+    return search_twitter_results
 
 # 固有名詞選択機構
 def select_propernoun(search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
-    jumanpp = Juman(timeout = 60)
-    # jumanpp.timeout = 60
-
+    jumanpp = Juman()
     all_propernoun_word_in_twitter = []
+    
+    result = jumanpp.analysis(search_twitter_results)
 
-    for sentence in search_twitter_results:
-        
-        sentence = sentence.replace(" ", "")
-        result = jumanpp.analysis(str(sentence))
-
-        for mrph in result.mrph_list(): # 各形態素にアクセス
-            if mrph.bunrui == '固有名詞' or mrph.bunrui == '地名' or mrph.bunrui == '組織名':
-                all_propernoun_word_in_twitter.append(mrph.midasi)
+    for mrph in result.mrph_list(): # 各形態素にアクセス
+        if mrph.bunrui == '固有名詞' or mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名':
+            all_propernoun_word_in_twitter.append(mrph.midasi)
 
     if all_propernoun_word_in_twitter == []:
-        all_propernoun_word_in_twitter = ['佐藤健']
+        all_propernoun_word_in_twitter = ['固有名詞なし']
 
     propernoun_word = random.choice(all_propernoun_word_in_twitter)
 
@@ -168,6 +179,8 @@ def main():
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
 
+    # simile_noun_word = '槍'
+    
     # twitter検索
     search_twitter_results = search_twitter(declinable_word, simile_noun_word)
 
