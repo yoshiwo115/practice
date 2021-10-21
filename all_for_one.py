@@ -86,8 +86,6 @@ def search_caseframe(declinable_word, case):
 # twitter検索
 def search_twitter(declinable_word, simile_noun_word):
     import tweepy
-    import random
-    import re
 
     f = open('twitter_token.txt', 'r')
     datalist = [s.strip() for s in f.readlines()]
@@ -132,15 +130,12 @@ def select_propernoun(search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
     jumanpp = Juman()
-    
     all_propernoun_word_in_twitter = []
 
     for sentence in search_twitter_results:
         
         sentence = sentence.replace(" ", "")
-        
         print(sentence)
-        
         result = jumanpp.analysis(str(sentence))
 
         for mrph in result.mrph_list(): # 各形態素にアクセス
