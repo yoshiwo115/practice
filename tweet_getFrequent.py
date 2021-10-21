@@ -28,7 +28,7 @@ sources = ["TweetDeck", "Twitter Web Client", "Twitter for iPhone",
             "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
 #取得ツイート数
-count = 5
+count = 50
 
 #検索ワード
 search_word = '綺麗だ 顔 -filter:retweets'

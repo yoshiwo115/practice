@@ -15,10 +15,10 @@ def sentence_analysys(sentence):
     for tag in result.tag_list():
         if tag.pas is not None: # find predicate
             declinable_word = ''.join(mrph.midasi for mrph in tag.mrph_list())
-            print('述語: '+ declinable_word)
+            # print('述語: '+ declinable_word)
             for case, args in tag.pas.arguments.items(): # case: str, args: list of Argument class
                 for arg in args: # arg: Argument class
-                    print('\t格: %s,  項: %s  (項の基本句ID: %d)' % (case, arg.midasi, arg.tid))
+                    # print('\t格: %s,  項: %s  (項の基本句ID: %d)' % (case, arg.midasi, arg.tid))
                     noun_word = arg.midasi
                     case = case
 
@@ -53,8 +53,8 @@ def search_caseframe(declinable_word, case):
                     #entry以下でループを回す
                     
                     if event == 'end' and elem.tag == 'entry': 
-                        #entryのendタグが来たら 
-                        print(elem.attrib) #何で検索されているか表示
+                        # entryのendタグが来たら 
+                        # print(elem.attrib) #何で検索されているか表示
                         elem.clear()
                         return component_array #ループを抜ける
 
@@ -69,7 +69,7 @@ def search_caseframe(declinable_word, case):
 
                             elif event == 'end' and elem.tag == 'component':
                                 component_array.append(elem.text)
-                                print(elem.text)
+                                # print(elem.text)
                     
                     else:
                         elem.clear()
@@ -106,7 +106,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 5
+    count = 50
 
     # カウント変数
     n = 0
@@ -116,11 +116,10 @@ def search_twitter(declinable_word, simile_noun_word):
 
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies'
-    print(search_word)
 
-    search_results = api.search_tweets(q = search_word, count = count)
-
-    for result in search_results:
+    # search_results = api.search_tweets(q = search_word, count = count)
+    for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
+    # for result in search_results:
         results_text_list.append(result.text)
 
     return results_text_list
@@ -129,18 +128,18 @@ def search_twitter(declinable_word, simile_noun_word):
 def select_propernoun(search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
-    jumanpp = Juman()
+    jumanpp = Juman(timeout = 60)
+    # jumanpp.timeout = 60
+
     all_propernoun_word_in_twitter = []
 
     for sentence in search_twitter_results:
         
         sentence = sentence.replace(" ", "")
-        print(sentence)
         result = jumanpp.analysis(str(sentence))
 
         for mrph in result.mrph_list(): # 各形態素にアクセス
             if mrph.bunrui == '固有名詞' or mrph.bunrui == '地名' or mrph.bunrui == '組織名':
-                print(mrph.midasi)
                 all_propernoun_word_in_twitter.append(mrph.midasi)
 
     if all_propernoun_word_in_twitter == []:
