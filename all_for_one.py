@@ -8,17 +8,16 @@ def sentence_analysys(sentence):
     # pyKNPで格情報取得
     knp = KNP()
     result = knp.parse(sentence)
+
     noun_word = ''
     declinable_word = ''
     case = ''
 
     for tag in result.tag_list():
-        if tag.pas is not None: # find predicate
-            declinable_word = tag.repname
-            # print('述語: '+ declinable_word)
-            for case, args in tag.pas.arguments.items(): # case: str, args: list of Argument class
-                # print(get_arguments(case))
-                for arg in args: # arg: Argument class
+        if tag.pas is not None: # 述語を見つける
+            declinable_word = tag.repname # 正規化代表表記を保存
+            for case, args in tag.pas.arguments.items(): # case: 格, args: Argumentのリスト https://pyknp.readthedocs.io/en/latest/tag.html#pyknp.knp.pas.Pas.arguments
+                for arg in args:
                     noun_word = arg.midasi
                     case = case
 
@@ -69,7 +68,7 @@ def search_caseframe(declinable_word, case):
 
                             elif event == 'end' and elem.tag == 'component':
                                 component_array.append(elem.text)
-                                # print(elem.text)
+                                print(elem.text)
                     
                     else:
                         elem.clear()
@@ -164,11 +163,11 @@ def main():
     sentence_analysys_result = sentence_analysys(input_dialogue)
 
     # 名詞
-    noun_word = sentence_analysys_result[0]
+    noun_word, declinable_word, case= sentence_analysys_result
     # 用言
-    declinable_word = sentence_analysys_result[1]
-    # 格
-    case = sentence_analysys_result[2] + '格'
+    # declinable_word = sentence_analysys_result[1]
+    # # 格
+    # case = sentence_analysys_result[2] + '格'
 
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
