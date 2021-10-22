@@ -67,7 +67,7 @@ def search_caseframe(declinable_word, case):
 
                             elif event == 'end' and elem.tag == 'component':
                                 component_array.append(elem.text)
-                                print(elem.text)
+                                # print(elem.text)
                     
                     else:
                         elem.clear()
@@ -114,7 +114,7 @@ def search_twitter(declinable_word, simile_noun_word):
 
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies'
-    print(search_word)
+    print('twitter検索ワード: ' + search_word)
 
     # search_results = api.search_tweets(q = search_word, count = count)
     for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
@@ -169,8 +169,9 @@ def main():
 
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
-    
-    # twitter検索用に/以下を削除
+    print('選択した直喩名詞: ' + simile_noun_word)
+
+    # twitter検索用に直喩名詞の/以下を削除
     declinable_word = declinable_word.split('/')[0]
 
     # twitter検索
@@ -178,12 +179,13 @@ def main():
 
     # 固有名詞選択
     propernoun_word = select_propernoun(search_twitter_results)
+    print('選択した固有名詞: ' + propernoun_word)
 
     # 合体
     result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
     
     # 出力
-    print(result)
+    print('system出力: ' + result)
 
 if __name__ == "__main__":
     main()
