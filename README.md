@@ -15,7 +15,10 @@ dockerのCLIでコマンド操作、ファイル実行
   
 ・powershellでのheadとtail  
 Get-Content "kyoto-univ-web-cf-2.0.xml"-Encoding UTF8 | Select-Object -first 100  
-Get-Content "kyoto-univ-web-cf-2.0.xml"-Encoding UTF8 | Select-Object -last 100  
+Get-Content "kyoto-univ-web-cf-2.0.xml"-Encoding UTF8 | Select-Object -last 100 
+
+・powershell:特定の文字列の後の何行かを取る 
+Select-String -Path "kyoto-univ-web-cf-2.0.xml" -Encoding UTF8 -Pattern "<entry headword=`"綺麗だ/きれいだ`"" -Context 0, 1 
 
 ・grep的なpowershellコマンド
 Select-String "美味しい/おいしい" kyoto-univ-web-cf-2.0.xml -Encoding UTF8  
