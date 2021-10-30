@@ -115,7 +115,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 5
+    count = 15
 
     # カウント変数
     n = 0
