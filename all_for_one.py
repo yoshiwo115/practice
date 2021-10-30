@@ -1,6 +1,7 @@
 from pyknp import KNP
 from pyknp import Juman
 import random
+import re
 
 # 文情報解析機構
 def sentence_analysys(sentence):
@@ -25,13 +26,23 @@ def sentence_analysys(sentence):
 # 直喩名詞選択機構
 def select_simile_noun_word(noun_word, declinable_word, case):
     
-    simile_noun_word = random.choice(search_caseframe(declinable_word, case))
+    component_array = search_caseframe(declinable_word, case)
+    # simile_noun_word = random.choice(component_array)
+
+    component_array_after = []
+    
+    # /以降の文字削除
+    for word in component_array:
+        component_array_after.append(re.sub('[<>]', '', word.split('/')[0]))
+    #<>とか削除しなきゃ
+
+    # import word2vec_sample
+    # l = word2vec_sample.word2vec(noun_word, component_array_after)
+
+    simile_noun_word = random.choice(component_array_after)
 
     if simile_noun_word == "×":
         print('村上春樹くらい分からない')
-
-    # /以降の文字削除
-    simile_noun_word = simile_noun_word.split('/')[0]
 
     return simile_noun_word
 
@@ -161,11 +172,7 @@ def main():
     sentence_analysys_result = sentence_analysys(input_dialogue)
 
     # 名詞
-    noun_word, declinable_word, case= sentence_analysys_result
-    # 用言
-    # declinable_word = sentence_analysys_result[1]
-    # # 格
-    # case = sentence_analysys_result[2] + '格'
+    noun_word, declinable_word, case = sentence_analysys_result
 
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
