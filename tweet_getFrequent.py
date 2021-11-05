@@ -28,10 +28,10 @@ sources = ["TweetDeck", "Twitter Web Client", "Twitter for iPhone",
             "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
 #取得ツイート数
-count = 50
+count = 5
 
 #検索ワード
-search_word = '綺麗だ 顔 -filter:retweets'
+search_word = 'あくどい 連中 -filter:retweets -filter:replies'
 
 n=0
 data=[]
@@ -44,11 +44,6 @@ for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
     print(result.text)
     data.append(result)
     Ginzadata.append(result.text)
-
-
-# 最新ツイートの日時
-data[0].created_at
-
 
 print('\n')
 
