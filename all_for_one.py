@@ -2,6 +2,10 @@ from pyknp import KNP
 from pyknp import Juman
 import random
 import re
+import time
+
+# 処理前の時刻
+t1 = time.time() 
 
 # 文情報解析機構
 def sentence_analysys(sentence):
@@ -33,13 +37,15 @@ def select_simile_noun_word(noun_word, declinable_word, case):
     
     # /以降の文字削除
     for word in component_array:
+        # twitter検索用に直喩名詞の/以下を削除
+        #<>とか削除
         component_array_after.append(re.sub('[<>]', '', word.split('/')[0]))
-    #<>とか削除しなきゃ
+    
 
-    # import word2vec_sample
-    # l = word2vec_sample.word2vec(noun_word, component_array_after)
+    import word2vec_sample
+    l = word2vec_sample.word2vec(noun_word, component_array_after)
 
-    simile_noun_word = random.choice(component_array_after)
+    simile_noun_word = random.choice(l)
 
     if simile_noun_word == "×":
         print('村上春樹くらい分からない')
@@ -115,23 +121,22 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 15
-
+    count = 5
     # カウント変数
     n = 0
-
     # 空のリスト
     results_text_list = []
 
     #検索ワード
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies'
-    print('twitter検索ワード: ' + search_word)
+    print('・twitter検索ワード: ' + search_word + '\n')
 
     # search_results = api.search_tweets(q = search_word, count = count)
     for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
-    # for result in search_results:
-        # print(result.text)
-        results_text_list.append(result.text)
+        n += 1
+        print('----{}----'.format(n))
+        print(result.text)
+        results_text_list.append(str(result.text))
 
     # results_text_listリストを文字列に
     search_twitter_results = "".join(results_text_list)
@@ -139,7 +144,7 @@ def search_twitter(declinable_word, simile_noun_word):
     search_twitter_results = str(search_twitter_results)
     
     if search_twitter_results == "":
-        search_twitter_results = "森田さん空です"
+        print("から")
 
     return search_twitter_results
 
@@ -153,7 +158,7 @@ def select_propernoun(search_twitter_results):
     result = jumanpp.analysis(search_twitter_results)
 
     for mrph in result.mrph_list(): # 各形態素にアクセス
-        if mrph.bunrui == '固有名詞' or mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名':
+        if mrph.bunrui == '固有名詞' or '人名' or '地名' or '組織名':
             all_propernoun_word_in_twitter.append(mrph.midasi)
 
     if all_propernoun_word_in_twitter == []:
@@ -166,19 +171,23 @@ def select_propernoun(search_twitter_results):
 def main():
 
     # User入力
-    input_dialogue = input('User入力: ')
+    input_dialogue = input('・User入力: ')
 
     # 文情報解析結果
+    print('・文情報解析')
     sentence_analysys_result = sentence_analysys(input_dialogue)
 
-    # 名詞
+    # 名詞, 用言, 格
     noun_word, declinable_word, case = sentence_analysys_result
+    print(noun_word, declinable_word, case)
 
     # 直喩に使う名詞
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
-    print('選択した直喩名詞: ' + simile_noun_word)
+    print('・直喩名詞: ' + simile_noun_word)
 
-    # twitter検索用に直喩名詞の/以下を削除
+    # simile_noun_word = '連中'
+
+    # twitter検索用に用言の/以下を削除
     declinable_word = declinable_word.split('/')[0]
 
     # twitter検索
@@ -192,7 +201,14 @@ def main():
     result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
     
     # 出力
-    print('system出力: ' + result)
+    print('・system出力: ' + result)
 
 if __name__ == "__main__":
     main()
+
+# 処理後の時刻
+t2 = time.time()
+ 
+# 経過時間を表示
+elapsed_time = t2-t1
+print(f"経過時間：{elapsed_time}")
