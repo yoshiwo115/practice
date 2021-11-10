@@ -4,9 +4,6 @@ import random
 import re
 import time
 
-# 処理前の時刻
-t1 = time.time() 
-
 # 文情報解析機構
 def sentence_analysys(sentence):
     # pyKNPで格情報取得
@@ -31,8 +28,8 @@ def sentence_analysys(sentence):
 def select_simile_noun_word(noun_word, declinable_word, case):
     
     component_array = search_caseframe(declinable_word, case)
-    # simile_noun_word = random.choice(component_array)
 
+    # 綺麗にした後の
     component_array_after = []
     
     # /以降の文字削除
@@ -41,9 +38,7 @@ def select_simile_noun_word(noun_word, declinable_word, case):
         #<>とか削除
         component_array_after.append(re.sub('[<>]', '', word.split('/')[0]))
     
-
-    import word2vec_sample
-    l = word2vec_sample.word2vec(noun_word, component_array_after)
+    l = word2vec(noun_word, component_array_after)
 
     simile_noun_word = random.choice(l)
 
@@ -85,18 +80,29 @@ def search_caseframe(declinable_word, case):
                             elif event == 'end' and elem.tag == 'component':
                                 component_array.append(elem.text)
                                 # print(elem.text)
-                    
                     else:
                         elem.clear()
                         # argumentタグ以下のメモリを開放する⇒次のargumentを読む
-
-
-
         else:
             elem.clear()
             # entryタグ以下のメモリを開放する⇒次のentryを読む
     
     return "×"
+
+# 単語距離測定
+def word2vec(noun_word, component_array):
+    from gensim.models import KeyedVectors
+
+    model = KeyedVectors.load_word2vec_format('entity_vector.model.bin', binary=True)
+    l = []
+
+    for word in component_array:
+        if word in model:
+            if model.similarity(noun_word, word) < 0.4:
+                l.append(word)
+
+    print(l)
+    return l
 
 # twitter検索
 def search_twitter(declinable_word, simile_noun_word):
@@ -128,15 +134,14 @@ def search_twitter(declinable_word, simile_noun_word):
     results_text_list = []
 
     #検索ワード
-    search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies'
+    search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies -filter:quote'
     print('・twitter検索ワード: ' + search_word + '\n')
 
-    # search_results = api.search_tweets(q = search_word, count = count)
     for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
         n += 1
         print('----{}----'.format(n))
         print(result.text)
-        results_text_list.append(str(result.text))
+        results_text_list.append(str(result.text.replace(" ", "").replace('　', '')))
 
     # results_text_listリストを文字列に
     search_twitter_results = "".join(results_text_list)
@@ -144,7 +149,8 @@ def search_twitter(declinable_word, simile_noun_word):
     search_twitter_results = str(search_twitter_results)
     
     if search_twitter_results == "":
-        print("から")
+        print("何も取得できなかった")
+        return 0
 
     return search_twitter_results
 
@@ -158,7 +164,8 @@ def select_propernoun(search_twitter_results):
     result = jumanpp.analysis(search_twitter_results)
 
     for mrph in result.mrph_list(): # 各形態素にアクセス
-        if mrph.bunrui == '固有名詞' or '人名' or '地名' or '組織名':
+        if mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名' or mrph.bunrui == '固有名詞':
+            print(mrph.midasi)
             all_propernoun_word_in_twitter.append(mrph.midasi)
 
     if all_propernoun_word_in_twitter == []:
@@ -173,9 +180,15 @@ def main():
     # User入力
     input_dialogue = input('・User入力: ')
 
+    # 処理前の時刻
+    t1 = time.time()
+
     # 文情報解析結果
     print('・文情報解析')
     sentence_analysys_result = sentence_analysys(input_dialogue)
+
+    # 処理後の時刻
+    t2 = time.time()
 
     # 名詞, 用言, 格
     noun_word, declinable_word, case = sentence_analysys_result
@@ -185,7 +198,11 @@ def main():
     simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
     print('・直喩名詞: ' + simile_noun_word)
 
-    # simile_noun_word = '連中'
+    # 処理後の時刻
+    t3 = time.time()
+
+    # 試し用
+    # simile_noun_word = "元"
 
     # twitter検索用に用言の/以下を削除
     declinable_word = declinable_word.split('/')[0]
@@ -193,9 +210,15 @@ def main():
     # twitter検索
     search_twitter_results = search_twitter(declinable_word, simile_noun_word)
 
+    # 処理後の時刻
+    t4 = time.time()
+
     # 固有名詞選択
     propernoun_word = select_propernoun(search_twitter_results)
     print('選択した固有名詞: ' + propernoun_word)
+
+    # 処理後の時刻
+    t5 = time.time()
 
     # 合体
     result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
@@ -203,12 +226,17 @@ def main():
     # 出力
     print('・system出力: ' + result)
 
+    # 経過時間を表示
+    time1 = t2-t1
+    time2 = t3-t2
+    time3 = t4-t3
+    time4 = t5-t4
+    print(f"文解析時間：{time1}")
+    print(f"直喩名詞選択時間：{time2}")
+    print(f"twitter検索時間：{time3}")
+    print(f"固有名詞選択時間：{time4}")
+
 if __name__ == "__main__":
     main()
 
-# 処理後の時刻
-t2 = time.time()
- 
-# 経過時間を表示
-elapsed_time = t2-t1
-print(f"経過時間：{elapsed_time}")
+
