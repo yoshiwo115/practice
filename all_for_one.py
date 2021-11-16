@@ -147,7 +147,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 10
+    count = 5
     # カウント変数
     n = 0
     # 空のリスト
@@ -169,23 +169,37 @@ def search_twitter(declinable_word, simile_noun_word):
     search_twitter_results = str(search_twitter_results)
     
     if search_twitter_results == "":
-        print("何も取得できなかった")
-        return 0
+        search_twitter_results == "吉田twiジャネット"
 
     return search_twitter_results
 
 # 固有名詞選択機構
-def select_propernoun(search_twitter_results):
+def select_propernoun(simile_noun_word, search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
     jumanpp = Juman()
-    # KNPも追加したい
+    # KNPも追加したいがうまくいかない
     # knp = KNP()
     
     juman_result = jumanpp.analysis(search_twitter_results)
     # knp_result = knp.parse(search_twitter_results)
 
     all_propernoun_word_in_twitter = []
+
+    # for tag in knp_result.tag_list():
+    #     if simile_noun_word == tag.midasi: # 直喩名詞の
+    #         for case, args in tag.arguments.items(): # 係り受け関係を抽出
+    #             for arg in args:
+    #                 print(arg.midasi)
+    #                 all_propernoun_word_in_twitter.append(arg.midasi)
+    #                 case = case
+
+    # for mrph in knp_result.mrph_list(): # 各形態素にアクセス
+    #     if mrph.midasi == simile_noun_word:
+    #         for tag in knp_result.tag_list():
+    #             if mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名' or mrph.bunrui == '固有名詞':
+    #                 print(mrph.midasi)
+    #                 all_propernoun_word_in_twitter.append(mrph.midasi)
 
     for mrph in juman_result.mrph_list(): # 各形態素にアクセス
         if mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名' or mrph.bunrui == '固有名詞':
@@ -239,7 +253,7 @@ def main():
     t4 = time.time()
 
     # 固有名詞選択
-    propernoun_word = select_propernoun(search_twitter_results)
+    propernoun_word = select_propernoun(simile_noun_word, search_twitter_results)
     print('選択した固有名詞: ' + propernoun_word)
 
     # 処理後の時刻
