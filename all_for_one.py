@@ -107,9 +107,6 @@ def word2vec(noun_word, component_array):
             for mrph in result.mrph_list(): # 各形態素にアクセス
                 if mrph.bunrui == '普通名詞':
                     dic[word] = model.similarity(noun_word, word)
-    
-    print(dic)
-    print(component_array)
 
     # 辞書のソート
     list = sorted(dic.items(), key=lambda x:x[1])
