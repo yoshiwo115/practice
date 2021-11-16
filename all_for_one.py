@@ -147,7 +147,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 5
+    count = 10
     # カウント変数
     n = 0
     # 空のリスト
@@ -179,11 +179,15 @@ def select_propernoun(search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
     jumanpp = Juman()
-    all_propernoun_word_in_twitter = []
+    # KNPも追加したい
+    # knp = KNP()
     
-    result = jumanpp.analysis(search_twitter_results)
+    juman_result = jumanpp.analysis(search_twitter_results)
+    # knp_result = knp.parse(search_twitter_results)
 
-    for mrph in result.mrph_list(): # 各形態素にアクセス
+    all_propernoun_word_in_twitter = []
+
+    for mrph in juman_result.mrph_list(): # 各形態素にアクセス
         if mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名' or mrph.bunrui == '固有名詞':
             print(mrph.midasi)
             all_propernoun_word_in_twitter.append(mrph.midasi)
