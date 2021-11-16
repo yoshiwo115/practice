@@ -99,12 +99,17 @@ def word2vec(noun_word, component_array):
     # 辞書の宣言
     dic = dict()
 
+    jumanpp = Juman()    
+
     for word in component_array:
         if word in model:
-
-            dic[word] = model.similarity(noun_word, word)
+            result = jumanpp.analysis(word)
+            for mrph in result.mrph_list(): # 各形態素にアクセス
+                if mrph.bunrui == '普通名詞':
+                    dic[word] = model.similarity(noun_word, word)
     
     print(dic)
+    print(component_array)
 
     # 辞書のソート
     list = sorted(dic.items(), key=lambda x:x[1])
@@ -112,13 +117,12 @@ def word2vec(noun_word, component_array):
     dic.update(list)
     print(dic)
 
+    # keyだけ取り出す
     for key in dic.keys():
         l.append(key)
 
-    print(l)
-
     # 上からいくつかを抽出
-    num = round((len(l)/3))
+    num = round((len(l)/2))
     l2 = l[:num]
 
     return l2
