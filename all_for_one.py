@@ -189,7 +189,8 @@ def select_propernoun(search_twitter_results):
             all_propernoun_word_in_twitter.append(mrph.midasi)
 
     if all_propernoun_word_in_twitter == []:
-        all_propernoun_word_in_twitter = ['固有名詞なし']
+        # 何も取得できなかった場合
+        all_propernoun_word_in_twitter = ['吉田ジャネット']
 
     propernoun_word = random.choice(all_propernoun_word_in_twitter)
 
