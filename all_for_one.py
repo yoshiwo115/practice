@@ -96,13 +96,32 @@ def word2vec(noun_word, component_array):
     model = KeyedVectors.load_word2vec_format('entity_vector.model.bin', binary=True)
     l = []
 
+    # 辞書の宣言
+    dic = dict()
+
     for word in component_array:
         if word in model:
-            if model.similarity(noun_word, word) < 0.4:
-                l.append(word)
+
+            dic[word] = model.similarity(noun_word, word)
+    
+    print(dic)
+
+    # 辞書のソート
+    list = sorted(dic.items(), key=lambda x:x[1])
+    dic.clear()
+    dic.update(list)
+    print(dic)
+
+    for key in dic.keys():
+        l.append(key)
 
     print(l)
-    return l
+
+    # 上からいくつかを抽出
+    num = round((len(l)/3))
+    l2 = l[:num]
+
+    return l2
 
 # twitter検索
 def search_twitter(declinable_word, simile_noun_word):
@@ -238,5 +257,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
