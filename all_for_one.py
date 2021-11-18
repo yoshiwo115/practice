@@ -157,6 +157,10 @@ def search_twitter(declinable_word, simile_noun_word):
     search_word = declinable_word + " " + simile_noun_word + " " + '-filter:retweets -filter:replies -filter:quote'
     print('・twitter検索ワード: ' + search_word + '\n')
 
+    # APIの場合
+    # tweets = api.search(q=["あくどい 連中"], count=count)
+
+    # tweepy.Cursorの場合
     for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
         n += 1
         print('----{}----'.format(n))
