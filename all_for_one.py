@@ -158,19 +158,21 @@ def search_twitter(declinable_word, simile_noun_word):
     print('・twitter検索ワード: ' + search_word + '\n')
 
     # APIの場合
-    # tweets = api.search(q=["あくどい 連中"], count=count)
+    tweets = api.search_tweets(q=search_word, lang='ja', result_type='recent', count=count, tweet_mode='extended')
 
     # tweepy.Cursorの場合
-    for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
-        n += 1
-        print('----{}----'.format(n))
-        print(result.text)
-        results_text_list.append(str(result.text.replace(" ", "").replace('　', '')))
+    # for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
+    #     n += 1
+    #     print('----{}----'.format(n))
+    #     print(result.text)
+    #     results_text_list.append(str(result.text.replace(" ", "").replace('　', '')))
 
     # results_text_listリストを文字列に
-    search_twitter_results = "".join(results_text_list)
-    search_twitter_results = search_twitter_results.replace(" ", "")
-    search_twitter_results = str(search_twitter_results)
+    # search_twitter_results = "".join(results_text_list)
+    print(tweets.full_text)
+
+    # search_twitter_results = tweets.replace(" ", "")
+    search_twitter_results = str(tweets)
     
     if search_twitter_results == "":
         search_twitter_results == "吉田twiジャネット"
