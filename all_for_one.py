@@ -147,7 +147,7 @@ def search_twitter(declinable_word, simile_noun_word):
                 "ついっぷる", "Janetter", "twicca", "Keitai Web", "Twitter for Mac"]
 
     # 取得ツイート数
-    count = 5
+    count = 100
     # カウント変数
     n = 0
     # 空のリスト
@@ -158,21 +158,18 @@ def search_twitter(declinable_word, simile_noun_word):
     print('・twitter検索ワード: ' + search_word + '\n')
 
     # APIの場合
-    tweets = api.search_tweets(q=search_word, lang='ja', result_type='recent', count=count, tweet_mode='extended')
+    tweets = api.search_tweets(q=search_word, lang='ja', result_type='recent', count=count)
 
-    # tweepy.Cursorの場合
-    # for result in tweepy.Cursor(api.search_tweets, q=search_word).items(count):
-    #     n += 1
-    #     print('----{}----'.format(n))
-    #     print(result.text)
-    #     results_text_list.append(str(result.text.replace(" ", "").replace('　', '')))
+    # 鈴木純一郎
+    for s in tweets:
+        if s.source in sources and "http" not in s.text and "#" not in s.text:
+            n += 1
+            print('----{}----'.format(n))
+            print(s.text) 
+            results_text_list.append(str(s.text).replace(" ", "").replace('　', ''))
 
     # results_text_listリストを文字列に
-    # search_twitter_results = "".join(results_text_list)
-    print(tweets.full_text)
-
-    # search_twitter_results = tweets.replace(" ", "")
-    search_twitter_results = str(tweets)
+    search_twitter_results = "".join(results_text_list).replace(" ", "")
     
     if search_twitter_results == "":
         search_twitter_results == "吉田twiジャネット"
@@ -184,28 +181,14 @@ def select_propernoun(simile_noun_word, search_twitter_results):
     # 用言と項構造になっている固有名詞を抽出
     
     jumanpp = Juman()
+    juman_result = jumanpp.analysis(search_twitter_results)
+
+    
     # KNPも追加したいがうまくいかない
     # knp = KNP()
-    
-    juman_result = jumanpp.analysis(search_twitter_results)
     # knp_result = knp.parse(search_twitter_results)
 
     all_propernoun_word_in_twitter = []
-
-    # for tag in knp_result.tag_list():
-    #     if simile_noun_word == tag.midasi: # 直喩名詞の
-    #         for case, args in tag.arguments.items(): # 係り受け関係を抽出
-    #             for arg in args:
-    #                 print(arg.midasi)
-    #                 all_propernoun_word_in_twitter.append(arg.midasi)
-    #                 case = case
-
-    # for mrph in knp_result.mrph_list(): # 各形態素にアクセス
-    #     if mrph.midasi == simile_noun_word:
-    #         for tag in knp_result.tag_list():
-    #             if mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名' or mrph.bunrui == '固有名詞':
-    #                 print(mrph.midasi)
-    #                 all_propernoun_word_in_twitter.append(mrph.midasi)
 
     for mrph in juman_result.mrph_list(): # 各形態素にアクセス
         if mrph.bunrui == '人名' or mrph.bunrui == '地名' or mrph.bunrui == '組織名' or mrph.bunrui == '固有名詞':
@@ -217,6 +200,8 @@ def select_propernoun(simile_noun_word, search_twitter_results):
         all_propernoun_word_in_twitter = ['吉田ジャネット']
 
     propernoun_word = random.choice(all_propernoun_word_in_twitter)
+    
+    
 
     return propernoun_word
 
@@ -240,14 +225,14 @@ def main():
     print(noun_word, declinable_word, case)
 
     # 直喩に使う名詞
-    simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
-    print('・直喩名詞: ' + simile_noun_word)
+    # simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
+    # print('・直喩名詞: ' + simile_noun_word)
 
     # 処理後の時刻
     t3 = time.time()
 
     # 試し用
-    # simile_noun_word = "元"
+    simile_noun_word = "肌"
 
     # twitter検索用に用言の/以下を削除
     declinable_word = declinable_word.split('/')[0]
