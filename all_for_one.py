@@ -159,8 +159,6 @@ def search_twitter(declinable_word, simile_noun_word):
 
     # APIの場合
     tweets = api.search_tweets(q=search_word, lang='ja', result_type='recent', count=count)
-
-    # 鈴木純一郎
     for s in tweets:
         if s.source in sources and "http" not in s.text and "#" not in s.text:
             n += 1
@@ -171,8 +169,9 @@ def search_twitter(declinable_word, simile_noun_word):
     # results_text_listリストを文字列に
     search_twitter_results = "".join(results_text_list).replace(" ", "")
     
+    # 何も取得できていなかったら
     if search_twitter_results == "":
-        search_twitter_results == "吉田twiジャネット"
+        search_twitter_results == "無取得男"
 
     return search_twitter_results
 
