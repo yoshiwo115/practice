@@ -224,14 +224,14 @@ def main():
     print(noun_word, declinable_word, case)
 
     # 直喩に使う名詞
-    # simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
-    # print('・直喩名詞: ' + simile_noun_word)
+    simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
+    print('・直喩名詞: ' + simile_noun_word)
 
     # 処理後の時刻
     t3 = time.time()
 
     # 試し用
-    simile_noun_word = "肌"
+    # simile_noun_word = "肌"
 
     # twitter検索用に用言の/以下を削除
     declinable_word = declinable_word.split('/')[0]
