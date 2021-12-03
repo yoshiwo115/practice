@@ -22,3 +22,6 @@ Select-String -Path "kyoto-univ-web-cf-2.0.xml" -Encoding UTF8 -Pattern "<entry 
 
 ・grep的なpowershellコマンド
 Select-String "美味しい/おいしい" kyoto-univ-web-cf-2.0.xml -Encoding UTF8  
+
+・baseXの検索例 
+//entry[@headword="綺麗だ/きれいだ"]/caseframe/argument[contains(@case,"ガ格")]/component
