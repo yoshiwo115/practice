@@ -28,4 +28,6 @@ Select-String "美味しい/おいしい" kyoto-univ-web-cf-2.0.xml -Encoding UT
 
 basexのコンテナに入って 
 CREATE db case /srv/basex/data/kyoto-univ-web-cf-2.0.xml 
-めっちゃ待つよ
+めっちゃ待つよ 
+ 
+きたああ、終わったあ 
