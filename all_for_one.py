@@ -239,9 +239,9 @@ def select_propernoun(simile_noun_word, search_twitter_results):
 
 def main():
 
-    shinkisei_flag = False
-    igaisei_flag = False
-    gutaisei_flag = False
+    shinkisei_flag = True
+    igaisei_flag = True
+    gutaisei_flag = True
 
     # User入力
     input_dialogue = input('・User入力: ')
