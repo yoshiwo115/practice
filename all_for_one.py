@@ -38,6 +38,7 @@ def select_simile_noun_word(noun_word, declinable_word, case):
         #<>とか削除
         component_array_after.append(re.sub('[<>]', '', word.split('/')[0]))
     
+    # word2vecにかける
     l = word2vec(noun_word, component_array_after)
 
     simile_noun_word = random.choice(l)
@@ -103,18 +104,23 @@ def search_caseframe(declinable_word, case):
         session.execute("open case")
         print(session.info())
 
-        # DBの内容を表示
-        print("\n" + session.execute(f"xquery //entry[@headword='{declinable_word}']/caseframe/argument[contains(@case,'{case}')]/component[text]"))
-        print("正常終了しました\n")
+        # DBの内容を表示 & 形式整え
+        a = session.execute(f"xquery //entry[@headword='{declinable_word}']/caseframe/argument[contains(@case,'{case}')]/component")
+        aa = a.replace('</component>', '')
+        aaa = re.sub(r"[a-z]", '', aa)
+        aaaa = re.sub(r"[0-9]", '', aaa)
+        aaaaa = aaaa.replace("< =\"\">", '')
+        # print(aaaaa)
 
-        component_array.append()
+        component_array = aaaaa.split("\n")
+        print("正常終了しました\n")
 
     finally:
         # セッションを閉じる
         if session:
             session.close()
     
-    return 
+    return component_array
 
 # 単語距離測定
 def word2vec(noun_word, component_array):
@@ -152,7 +158,7 @@ def word2vec(noun_word, component_array):
     return l2
 
 # twitter検索
-def search_twitter(declinable_word, simile_noun_word):
+def search_twitter(declinable_word, simile_noun_word, result_type):
     import tweepy
 
     f = open('twitter_token.txt', 'r')
@@ -185,7 +191,7 @@ def search_twitter(declinable_word, simile_noun_word):
     print('・twitter検索ワード: ' + search_word + '\n')
 
     # APIの場合
-    tweets = api.search_tweets(q=search_word, lang='ja', result_type='recent', count=count)
+    tweets = api.search_tweets(q=search_word, lang='ja', result_type=result_type, count=count)
     for s in tweets:
         if s.source in sources and "http" not in s.text and "#" not in s.text:
             n += 1
@@ -233,44 +239,49 @@ def select_propernoun(simile_noun_word, search_twitter_results):
 
 def main():
 
+    shinkisei_flag = True
+    igaisei_flag = True
+    gutaisei_flag = True
+
     # User入力
     input_dialogue = input('・User入力: ')
-
     # 処理前の時刻
     t1 = time.time()
-
     # 文情報解析結果
     print('・文情報解析')
     sentence_analysys_result = sentence_analysys(input_dialogue)
-
-    # 処理後の時刻
     t2 = time.time()
-
     # 名詞, 用言, 格
     noun_word, declinable_word, case = sentence_analysys_result
     print(noun_word, declinable_word, case)
 
-    # 直喩に使う名詞
-    simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
+    if igaisei_flag == True:
+        # 直喩に使う名詞
+        simile_noun_word = select_simile_noun_word(noun_word, declinable_word, case)
+    else:
+        simile_noun_word = noun_word
+    
     print('・直喩名詞: ' + simile_noun_word)
-
     # 処理後の時刻
     t3 = time.time()
-
-    # 試し用
-    # simile_noun_word = "肌"
-
     # twitter検索用に用言の/以下を削除
     declinable_word = declinable_word.split('/')[0]
 
-    # twitter検索
-    search_twitter_results = search_twitter(declinable_word, simile_noun_word)
-
+    if shinkisei_flag == True:
+        # twitter検索
+        search_twitter_results = search_twitter(declinable_word, simile_noun_word, 'recent')
+    else:
+        search_twitter_results = search_twitter(declinable_word, simile_noun_word, 'popular')
+    
     # 処理後の時刻
     t4 = time.time()
 
-    # 固有名詞選択
-    propernoun_word = select_propernoun(simile_noun_word, search_twitter_results)
+    if gutaisei_flag == True:
+        # 固有名詞選択
+        propernoun_word = select_propernoun(simile_noun_word, search_twitter_results)
+    else:
+        propernoun_word = simile_noun_word
+
     print('選択した固有名詞: ' + propernoun_word)
 
     # 処理後の時刻
