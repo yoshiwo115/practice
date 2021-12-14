@@ -1,10 +1,12 @@
-from pathlib import Path
-import os
-import pprint
 from BaseXClient import BaseXClient
 
 # セッション作成
 session = BaseXClient.Session('test-host', 1984, 'admin', 'admin')
+foo = '綺麗だ/きれいだ'
+bar = 'ガ格'
+a = ''
+
+component_array = []
 
 try:
     # DBオープン
@@ -12,8 +14,14 @@ try:
     print(session.info())
 
     # DBの内容を表示
-    print("\n" + session.execute("xquery //entry[@headword='綺麗だ/きれいだ']/caseframe/argument[contains(@case,'ガ格')]/component"))
+    a =  "\n" + session.execute(f"xquery //entry[@headword='{foo}']/caseframe/argument[contains(@case,'{bar}')]/component")
+    print(a)
+    component_array.append(a)
     print("正常終了しました\n")
+    
+    print(component_array[0])
+    print('component_array')
+
 
 finally:
     # セッションを閉じる

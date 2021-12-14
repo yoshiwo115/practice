@@ -47,8 +47,8 @@ def select_simile_noun_word(noun_word, declinable_word, case):
 
     return simile_noun_word
 
-# 格フレーム検索
-def search_caseframe(declinable_word, case):
+# 格フレーム検索xmltree
+# def search_caseframe(declinable_word, case):
     import xml.etree.ElementTree as ET
 
     component_array = []
@@ -88,6 +88,33 @@ def search_caseframe(declinable_word, case):
             # entryタグ以下のメモリを開放する⇒次のentryを読む
     
     return "×"
+
+# 格フレーム検索baseX
+def search_caseframe(declinable_word, case):
+    from BaseXClient import BaseXClient
+
+    component_array = []
+
+    # セッション作成
+    session = BaseXClient.Session('test-host', 1984, 'admin', 'admin')
+
+    try:
+        # DBオープン
+        session.execute("open case")
+        print(session.info())
+
+        # DBの内容を表示
+        print("\n" + session.execute(f"xquery //entry[@headword='{declinable_word}']/caseframe/argument[contains(@case,'{case}')]/component[text]"))
+        print("正常終了しました\n")
+
+        component_array.append()
+
+    finally:
+        # セッションを閉じる
+        if session:
+            session.close()
+    
+    return 
 
 # 単語距離測定
 def word2vec(noun_word, component_array):
