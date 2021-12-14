@@ -239,9 +239,9 @@ def select_propernoun(simile_noun_word, search_twitter_results):
 
 def main():
 
-    shinkisei_flag = True
-    igaisei_flag = True
-    gutaisei_flag = True
+    shinkisei_flag = False
+    igaisei_flag = False
+    gutaisei_flag = False
 
     # User入力
     input_dialogue = input('・User入力: ')
@@ -280,7 +280,7 @@ def main():
         # 固有名詞選択
         propernoun_word = select_propernoun(simile_noun_word, search_twitter_results)
     else:
-        propernoun_word = simile_noun_word
+        propernoun_word = ''
 
     print('選択した固有名詞: ' + propernoun_word)
 
@@ -288,7 +288,10 @@ def main():
     t5 = time.time()
 
     # 合体
-    result = 'そうだね。' + propernoun_word + 'の' + simile_noun_word + 'くらい' + declinable_word + 'ね'
+    if gutaisei_flag == True:
+        propernoun_word = propernoun_word + 'の'
+
+    result = 'そうだね。' + propernoun_word + simile_noun_word + 'くらい' + declinable_word + 'ね'
     
     # 出力
     print('・system出力: ' + result)
